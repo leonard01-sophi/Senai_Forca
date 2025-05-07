@@ -1,130 +1,162 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <ctype.h>
 
-#define verdadeiro 1
-#define falso 0
+#define TAM_MAX 20
+#define VERDADEIRO 1
+#define FALSO 0
+
+void mostrar_menu();
+void mostrar_instrucoes();
+void sortear_palavra(char palavra[], int qtd);
+void jogar(char palavra[]);
+int checar_letra(char letra);
+void mostrar_palavra(char formacao[], int tamanho);
+void mostrar_erros(char erros[], int total);
 
 int main() {
-    int i, j, sorteio, numletras, contagem, vidas = 6, acertos, lugar, letra_invalida = 0, num_invalido = 0, cont = -1, erros = 0;
-    char letra, formacao[20], palavraSeparada[20], invalidos[20], letraErros[20], elemento, resposta = 's';
-    int acertou = falso, letrarepetida = falso;
-    char *palavra[] = {"sextou", "intervalo", "prova", "professor", "senai", "github", "carnaval", "capivara"};
-    char *palavraSorteada;
+    char palavras[8][TAM_MAX] = {"sextou", "intervalo", "prova", "professor", "senai", "github", "carnaval", "capivara"};
+    int qtd_palavras = sizeof(palavras) / sizeof(palavras[0]);
+    char opcao;
 
     srand(time(NULL));
 
-    while (resposta != 'n') {
-        vidas = 6;
-        letra_invalida = 0;
-        num_invalido = 0;
-        cont = -1;
-        erros = 0;
+    do {
+        system("cls");
+        mostrar_menu();
 
-        system("cls"); // ou system("clear") no Linux
-        printf("--------------------------------------------JOGO DA FORCA--------------------------------------------");
-        printf("\n Funcionamento do jogo:");
-        printf("\n So e permitido inserir letras minusculas, sendo descontado 1 vida caso contrario;");
-        printf("\n Nao e permitido inserir caracteres especiais no jogo, sendo descontado 1 vida caso contrario;");
-        printf("\n O jogador tem 6 vidas, e o jogo acaba quando o jogador acerta a palavra ou perde todas as vidas;");
-        printf("\n-----------------------------------------------------------------------------------------------------\n");
+        printf("\nEscolha uma opcao: ");
+        scanf(" %c", &opcao);
 
-        sorteio = rand() % 8;
-        palavraSorteada = palavra[sorteio];
-        numletras = strlen(palavraSorteada);
-        acertos = numletras;
-
-        for (lugar = 0; lugar < numletras; lugar++) {
-            palavraSeparada[lugar] = palavraSorteada[lugar];
-            formacao[lugar] = '_';
+        switch (opcao) {
+            case '1':
+                jogar(palavras[rand() % qtd_palavras]);
+                break;
+            case '2':
+                mostrar_instrucoes();
+                break;
+            case '3':
+                printf("\nSaindo do jogo...\n");
+                break;
+            default:
+                printf("\nOpcao invalida!\n");
         }
 
-        while (vidas > 0 && acertos > 0) {
-            printf("\nVidas: %d\n", vidas);
-
-            for (lugar = 0; lugar < numletras; lugar++) {
-                printf("%c ", formacao[lugar]);
-            }
-
-            printf("\n\nDigite uma letra minuscula: ");
-            scanf(" %c", &letra);
-
-            if (letra >= 'a' && letra <= 'z') {
-                // Letra válida
-            } else if (letra >= 'A' && letra <= 'Z') {
-                letra_invalida++;
-                vidas--;
-                printf("\nERRO! A letra digitada e maiuscula! insira APENAS MINUSCULA!!!\n");
-                continue;
-            } else {
-                letra_invalida++;
-                vidas--;
-                printf("\nERRO! Voce digitou um caractere especial! insira APENAS letras MINUSULA!!!\n");
-                continue;
-            }
-
-            acertou = falso;
-            letrarepetida = falso;
-
-            for (lugar = 0; lugar < numletras; lugar++) {
-                if (letra == palavraSeparada[lugar]) {
-                    if (formacao[lugar] == letra) {
-                        letrarepetida = verdadeiro;
-                    } else if (letra != formacao[lugar]) {
-                        acertou = verdadeiro;
-                        formacao[lugar] = letra;
-                        acertos--;
-                    }
-                }
-            }
-
-            if (letrarepetida == verdadeiro) {
-                printf("\nATENCAO! A letra digitada ja foi utilizada!");
-            } else if (acertou == verdadeiro) {
-                printf("ACERTOU\n");
-            } else {
-                printf("ERROU\n");
-                erros++;
-                vidas--;
-                cont++;
-                letraErros[cont] = letra;
-            }
-
-            if (erros > 0) {
-                printf("\nERROS COMETIDOS: ");
-                for (int indice = 0; indice < cont + 1; indice++) {
-                    printf("%c ", letraErros[indice]);
-                }
-            }
-
-            if (acertos == 0) {
-                printf("\n\nPalavra completa: ");
-                for (lugar = 0; lugar < numletras; lugar++) {
-                    printf("%c ", formacao[lugar]);
-                }
-                printf("\n\nPARABENS! Voce acertou a palavra: %s", palavraSorteada);
-            }
+        if (opcao != '3') {
+            printf("\n\nPressione ENTER para voltar ao menu...");
+            getchar();
+            getchar();
         }
 
-        if (vidas == 0) {
-            printf("\n\nVoce perdeu! A palavra era: %s", palavraSorteada);
-            printf("\n----------------------------------------------------------------------------------------------------------");
-            if (num_invalido != 0) {
-                printf("\nDigitou %d valor(es) inválido(s) como números ou caracteres especiais", num_invalido);
-            }
-            if (acertos < numletras) {
-                printf("\nDigitou %d letra(s) certa(s)", letra_invalida - acertos);
-            } else {
-                printf("\nNão acertou nenhuma letra! Dica: Comece com vogais!\n");
-            }
-            printf("\nTente denovo, quem sabe numa proxima vez...");
-        }
-
-        printf("\n\nDeseja jogar novamente? (s/n): ");
-        scanf(" %c", &resposta);
-    }
+    } while (opcao != '3');
 
     return 0;
+}
+
+void mostrar_menu() {
+    printf("\n--------------------------------------------\n");
+    printf("                JOGO DA FORCA               \n");
+    printf("--------------------------------------------\n");
+    printf("1 - Jogar\n");
+    printf("2 - Instrucoes\n");
+    printf("3 - Sair\n");
+}
+
+void mostrar_instrucoes() {
+    printf("\n------------------ INSTRUCOES ------------------\n");
+    printf("- Use apenas letras minusculas.\n");
+    printf("- Letras maiusculas ou caracteres invalidos custam 1 vida.\n");
+    printf("- Voce tem 6 vidas para acertar a palavra.\n");
+    printf("- Letras repetidas nao descontam vidas.\n");
+    printf("------------------------------------------------\n");
+}
+
+void sortear_palavra(char palavra[], int qtd) {
+    const char *palavras[8] = {"sextou", "intervalo", "prova", "professor", "senai", "github", "carnaval", "capivara"};
+    strcpy(palavra, palavras[rand() % qtd]);
+}
+
+int checar_letra(char letra) {
+    if (letra >= 'a' && letra <= 'z') return 1;
+    if (letra >= 'A' && letra <= 'Z') return -1;
+    return 0;
+}
+
+void mostrar_palavra(char formacao[], int tamanho) {
+    for (int i = 0; i < tamanho; i++) {
+        printf("%c ", formacao[i]);
+    }
+    printf("\n");
+}
+
+void mostrar_erros(char erros[], int total) {
+    if (total == 0) return;
+    printf("\nErros cometidos: ");
+    for (int i = 0; i < total; i++) {
+        printf("%c ", erros[i]);
+    }
+    printf("\n");
+}
+
+void jogar(char palavra[]) {
+    int vidas = 6;
+    int tamanho = strlen(palavra);
+    int acertos = tamanho;
+    char formacao[TAM_MAX];
+    char erros[TAM_MAX];
+    int total_erros = 0;
+    char letra;
+
+    for (int i = 0; i < tamanho; i++) formacao[i] = '_';
+
+    while (vidas > 0 && acertos > 0) {
+        printf("\nVidas: %d\n", vidas);
+        mostrar_palavra(formacao, tamanho);
+
+        printf("\nDigite uma letra: ");
+        scanf(" %c", &letra);
+
+        int valida = checar_letra(letra);
+        if (valida == -1) {
+            printf("Letra maiuscula! Use minusculas.\n");
+            vidas--;
+            continue;
+        } else if (valida == 0) {
+            printf("Caractere invalido!\n");
+            vidas--;
+            continue;
+        }
+
+        int acertou = FALSO, repetida = FALSO;
+
+        for (int i = 0; i < tamanho; i++) {
+            if (palavra[i] == letra) {
+                if (formacao[i] == letra) {
+                    repetida = VERDADEIRO;
+                } else {
+                    formacao[i] = letra;
+                    acertos--;
+                    acertou = VERDADEIRO;
+                }
+            }
+        }
+
+        if (repetida) {
+            printf("Letra ja utilizada.\n");
+        } else if (acertou) {
+            printf("Acertou!\n");
+        } else {
+            printf("Errou!\n");
+            erros[total_erros++] = letra;
+            vidas--;
+        }
+
+        mostrar_erros(erros, total_erros);
+    }
+
+    if (acertos == 0) {
+        printf("\nParabens! Voce venceu! A palavra era: %s\n", palavra);
+    } else {
+        printf("\nVoce perdeu! A palavra era: %s\n", palavra);
+    }
 }
