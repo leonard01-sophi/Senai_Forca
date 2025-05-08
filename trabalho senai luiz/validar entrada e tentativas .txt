@@ -1,0 +1,118 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define MAX_TENTATIVAS 26
+#define TAM_PALAVRA 10
+
+char palavra[] = "computador";
+char letrasTentadas[MAX_TENTATIVAS];
+int qtdTentativas = 0;
+
+void limparTela() {
+    system("clear"); // Use "cls" se estiver no Windows
+}
+
+int letraJaTentada(char letra) {
+    for (int i = 0; i < qtdTentativas; i++) {
+        if (letrasTentadas[i] == letra) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void registrarTentativa(char letra) {
+    if (qtdTentativas < MAX_TENTATIVAS) {
+        letrasTentadas[qtdTentativas] = letra;
+        qtdTentativas++;
+    }
+}
+
+int letraValida(char letra) {
+    return isalpha(letra);
+}
+
+void mostrarEstadoAtual(char letrasCertas[]) {
+    printf("Palavra: ");
+    for (int i = 0; i < strlen(palavra); i++) {
+        if (letrasCertas[i]) {
+            printf("%c ", palavra[i]);
+        } else {
+            printf("_ ");
+        }
+    }
+    printf("\n");
+}
+
+void mostrarTentativas() {
+    printf("Tentativas até agora: ");
+    for (int i = 0; i < qtdTentativas; i++) {
+        printf("%c ", letrasTentadas[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    char letrasCertas[TAM_PALAVRA] = {0};
+    char entrada;
+    int acertou;
+
+    while (1) {
+        limparTela();
+        mostrarEstadoAtual(letrasCertas);
+        mostrarTentativas();
+
+        printf("Digite uma letra: ");
+        scanf(" %c", &entrada);
+        entrada = tolower(entrada);
+
+        if (!letraValida(entrada)) {
+            printf("Letra inválida. Tente novamente.\n");
+            getchar(); getchar(); // Espera o Enter
+            continue;
+        }
+
+        if (letraJaTentada(entrada)) {
+            printf("Letra já digitada.\n");
+            getchar(); getchar(); // Espera o Enter
+            continue;
+        }
+
+        registrarTentativa(entrada);
+
+        acertou = 0;
+        for (int i = 0; i < strlen(palavra); i++) {
+            if (palavra[i] == entrada) {
+                letrasCertas[i] = 1;
+                acertou = 1;
+            }
+        }
+
+        if (acertou) {
+            printf("Letra correta!\n");
+        } else {
+            printf("Letra incorreta.\n");
+        }
+
+        int venceu = 1;
+        for (int i = 0; i < strlen(palavra); i++) {
+            if (!letrasCertas[i]) {
+                venceu = 0;
+                break;
+            }
+        }
+
+        if (venceu) {
+            limparTela();
+            mostrarEstadoAtual(letrasCertas);
+            printf("Parabéns! Você descobriu a palavra.\n");
+            break;
+        }
+
+        getchar(); getchar(); // Espera o Enter
+    }
+
+    return 0;
+}
