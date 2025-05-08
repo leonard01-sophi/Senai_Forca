@@ -10,3 +10,7 @@ versao (jogo-forcaGUB.c) codificada por Thalisson
 
 Codigo todo modularizado atendendos as srcum1, scrum2 e scrum3
 >>>>>>> de91023 (modularizacao do projeto)
+
+att HUd
+
+>>>>>>> de91023 (att HUD)
