@@ -27,7 +27,7 @@ int main() {
                 int qtd_palavras = obter_qtd_palavras();
                 const char* palavra_sorteada = obter_palavra(rand() % qtd_palavras);
                 if (palavra_sorteada != NULL) {
-                    strcpy(palavra, palavra_sorteada);  // copia para variável local
+                    strcpy(palavra, palavra_sorteada);
                     jogar(palavra);
                 } else {
                     printf("Erro ao sortear palavra.\n");
@@ -46,8 +46,8 @@ int main() {
 
         if (opcao != '3') {
             printf("\n\nPressione ENTER para voltar ao menu...");
-            getchar(); // consome o \n pendente
-            getchar(); // espera Enter
+            getchar(); 
+            getchar(); 
         }
 
     } while (opcao != '3');

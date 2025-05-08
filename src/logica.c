@@ -22,7 +22,9 @@ void jogar(char palavra[]) {
     for (int i = 0; i < tamanho; i++) formacao[i] = '_';
 
     while (vidas > 0 && acertos > 0) {
-        limpar_tela();  
+        limpar_tela();
+        
+        forca(6 - vidas);
 
         printf("\nVidas: %d\n", vidas);
         mostrar_palavra(formacao, tamanho);
@@ -94,8 +96,10 @@ void jogar(char palavra[]) {
     mostrar_barra_de_progresso(pontos);
 
     if (acertos == 0) {
+        limpar_tela();
         printf("\nParabens! Voce venceu! A palavra era: %s\n", palavra);
     } else {
+        limpar_tela();
         printf("\nVoce perdeu! A palavra era: %s\n", palavra);
     }
 
