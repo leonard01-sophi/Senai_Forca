@@ -10,9 +10,9 @@ versao (jogo-forcaGUB.c) codificada por alunos senai
 
 
 ## como abrir 
-# para abrir esse projeto vc precisa baixar o zip , estrair os arquivos e abrir em um compilador .
-selecionar todos os arquivos menos o README .
-Codigo todo modularizado atendendos as srcum1, scrum2 e scrum3
+### para abrir esse projeto vc precisa baixar o zip , estrair os arquivos e abrir em um compilador .
+### selecionar todos os arquivos menos o README .
+Codigo todo modularizado atendendos as srcum1, scrum2 , scrum3 E scrum4 , do projeto jira .
 >>>>>>> de91023 (modularizacao do projeto)
 
 att HUd
